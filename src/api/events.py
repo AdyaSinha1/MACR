@@ -3,7 +3,10 @@ import contextvars
 from typing import Dict, Any
 
 # Context variable to track the current active job ID for the async context
-active_job_id: contextvars.ContextVar[str] = contextvars.ContextVar('active_job_id', default=None)
+active_job_id: contextvars.ContextVar[str] = contextvars.ContextVar(
+    "active_job_id", default=None
+)
+
 
 class EventBus:
     _queues: Dict[str, asyncio.Queue] = {}
@@ -25,7 +28,9 @@ class EventBus:
         target_job_id = job_id or active_job_id.get()
         if target_job_id and target_job_id in cls._queues:
             try:
-                cls._queues[target_job_id].put_nowait({"event": event_type, "data": data})
+                cls._queues[target_job_id].put_nowait(
+                    {"event": event_type, "data": data}
+                )
             except asyncio.QueueFull:
                 pass
 
@@ -33,4 +38,3 @@ class EventBus:
     def unsubscribe(cls, job_id: str):
         if job_id in cls._queues:
             del cls._queues[job_id]
-

@@ -1,6 +1,6 @@
 import time
-import pytest
 from core.circuit_breaker import CircuitBreaker
+
 
 def test_circuit_breaker_state_transitions():
     """Tests the complete CLOSED -> OPEN -> HALF_OPEN -> CLOSED state machine."""

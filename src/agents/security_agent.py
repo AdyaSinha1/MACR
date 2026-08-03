@@ -1,8 +1,10 @@
 from models.schemas import Finding
 from agents.base import BaseAgent
 
+
 class SecurityAgent(BaseAgent):
     category = "security"
+
     def get_system_prompt(self) -> str:
         return (
             "You are an elite Application Security Engineer. Your job is to analyze code for security vulnerabilities "

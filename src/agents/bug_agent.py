@@ -1,8 +1,10 @@
 from models.schemas import Finding
 from agents.base import BaseAgent
 
+
 class BugAgent(BaseAgent):
     category = "bug"
+
     def get_system_prompt(self) -> str:
         return (
             "You are an expert Software Engineer specializing in Bug Detection. "

@@ -1,8 +1,10 @@
 from models.schemas import Finding
 from agents.base import BaseAgent
 
+
 class StyleAgent(BaseAgent):
     category = "style"
+
     def get_system_prompt(self) -> str:
         return (
             "You are an expert Python Style Reviewer. Your job is to analyze code for PEP 8 violations, "
