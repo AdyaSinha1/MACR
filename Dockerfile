@@ -1,5 +1,5 @@
 # Stage 1: Build dependencies
-FROM python:3.10-slim as builder
+FROM python:3.10-slim AS builder
 WORKDIR /app
 
 # Install system build dependencies (required for some memory packages like FAISS)
@@ -11,8 +11,11 @@ RUN mkdir -p src/cli && touch src/__init__.py src/cli/__init__.py src/cli/main.p
 
 # Build wheels for core and memory dependencies
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels .
-RUN pip wheel --no-cache-dir --wheel-dir /app/wheels ".[memory]"
+RUN pip install --upgrade pip setuptools wheel
 
+RUN pip wheel --no-cache-dir --wheel-dir /app/wheels .
+
+RUN pip wheel --no-cache-dir --wheel-dir /app/wheels ".[memory]" || true
 # Stage 2: Runtime
 FROM python:3.10-slim
 WORKDIR /app
