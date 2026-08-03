@@ -1,60 +1,256 @@
 # Multi-Agent Code Review System (MACR)
 
-![CI](https://github.com/yourusername/macr/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/AdyaSinha1/MACR/actions/workflows/ci.yml/badge.svg)
 
-MACR is a highly resilient, multi-agent AI system designed to perform autonomous code reviews. Instead of relying on a single large prompt, MACR deploys specialized agents (Style, Bug, Security) that collaborate via a shared blackboard. 
+MACR (Multi-Agent Code Review System) is an autonomous AI-powered code review platform that uses multiple specialized agents to analyze source code. Instead of relying on a single LLM prompt, MACR uses collaborative agents for Style, Bug Detection, and Security analysis, coordinated through an orchestration layer.
 
-It leverages an **Evaluator-Optimizer loop** for true reasoning autonomy, a **Consensus Engine** to resolve overlapping findings, and **FAISS Vector Memory** to learn from historical reviews.
+The system combines an **Evaluator-Optimizer loop**, **Consensus Engine**, and **FAISS Vector Memory** to produce reliable and context-aware code review reports.
+
+---
+
+## Features
+
+### Multi-Agent Code Analysis
+MACR uses specialized agents that independently analyze code:
+
+- **Style Agent** - Detects code quality and style issues
+- **Bug Agent** - Identifies correctness problems and potential failures
+- **Security Agent** - Finds security vulnerabilities and risky patterns
+
+Agents execute concurrently using a custom asyncio-based orchestrator.
+
+---
+
+### Evaluator-Optimizer Loop
+
+Each agent evaluates and refines its own findings using confidence-based iterations to reduce incorrect suggestions and improve reliability.
+
+---
+
+### Consensus Engine
+
+Multiple agent findings are merged using semantic similarity and severity-based conflict resolution to generate a unified review report.
+
+---
+
+### RAG Memory System
+
+MACR uses:
+
+- FAISS Vector Database
+- Sentence Transformer embeddings
+
+to retrieve similar historical reviews and provide additional context during analysis.
+
+---
 
 ## Architecture
 
-MACR is built on a custom `asyncio` orchestrator (bypassing heavy frameworks like CrewAI) to maintain strict control over concurrency and self-reflection loops.
+```
+                 Code Input
+                     |
+                     v
+              Coordinator
+                     |
+     --------------------------------
+     |              |               |
+     v              v               v
+Style Agent     Bug Agent     Security Agent
+     |              |               |
+     --------------------------------
+                     |
+                     v
+            Consensus Engine
+                     |
+                     v
+             FAISS Memory Store
+                     |
+                     v
+            Markdown Report
+```
 
-### Key Features
-1. **Multi-Agent Orchestration**: Specialized agents run concurrently, managed by a custom asyncio coordinator.
-2. **Evaluator-Optimizer Loop**: Each agent self-critiques and refines its output (capped at 3 iterations) to minimize hallucinations.
-3. **Resilience**: Per-agent circuit breakers with exponential backoff prevent cascading API failures (e.g., rate limits).
-4. **Semantic Consensus**: A Consensus Engine uses fuzzy line-range grouping (±5 lines) and an LLM to merge overlapping findings from different agents.
-5. **Memory (RAG)**: FAISS + `sentence-transformers` caches and retrieves similar past reviews to inject historical context into the agents' prompts.
-
-*(Note: AST-based chunking for large files >1000 lines is planned as a future enhancement.)*
+---
 
 ## Installation
 
+### Clone Repository
+
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/macr.git
-cd macr
-
-# Install core CLI
-pip install -e .
-
-# Install with memory (FAISS) and dev dependencies
-pip install -e ".[memory,dev]"
+git clone https://github.com/AdyaSinha1/MACR.git
+cd MACR
 ```
+
+### Create Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+Activate:
+
+Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+Linux/Mac:
+
+```bash
+source venv/bin/activate
+```
+
+### Install Dependencies
+
+```bash
+pip install -e .
+```
+
+---
+
+## Configuration
+
+Create a `.env` file:
+
+```env
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+---
 
 ## Usage
 
-Set your Gemini API key:
+Run MACR on a Python file:
+
 ```bash
-export GEMINI_API_KEY="your-api-key"
+python -m src.cli.main samples/test.py
 ```
 
-Run a review on a file:
-```bash
-macr review path/to/your/file.py --output report.md --verbose
+The generated review report will be saved as:
+
+```
+review_report.md
 ```
 
-### Docker
-You can also run MACR fully containerized. The multi-stage Docker build automatically caches the ML models:
+Example output:
+
+```
+Initializing memory store...
+Starting multi-agent review...
+StyleAgent starting analysis
+BugAgent starting analysis
+SecurityAgent starting analysis
+Resolving conflicting findings
+Stored review in FAISS memory
+Review complete!
+```
+
+---
+
+## Web Interface
+
+Start the API server:
+
+```bash
+uvicorn src.api.app:app --reload
+```
+
+Open:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+## Docker Support
+
+Build and run using Docker:
+
 ```bash
 docker-compose build
-docker-compose run macr review samples/test.py
+docker-compose run macr
 ```
+
+---
 
 ## Evaluation
 
-To demonstrate MACR's pipeline metrics, you can run the evaluation script on a sample file:
+Run evaluation on sample code:
+
 ```bash
 python scripts/evaluate.py samples/test.py
 ```
+
+---
+
+## Project Structure
+
+```
+MACR
+│
+├── src
+│   ├── agents
+│   │   ├── style_agent.py
+│   │   ├── bug_agent.py
+│   │   └── security_agent.py
+│   │
+│   ├── orchestrator
+│   │   ├── coordinator.py
+│   │   └── consensus.py
+│   │
+│   ├── memory
+│   │   ├── embeddings.py
+│   │   └── faiss_store.py
+│   │
+│   ├── core
+│   └── reporting
+│
+├── tests
+├── samples
+└── README.md
+```
+
+---
+
+## Example Review Report
+
+MACR generates a structured Markdown report containing:
+
+- Severity level
+- Issue location
+- Agent responsible
+- Confidence score
+- Consensus reasoning
+
+Example:
+
+```
+Finding:
+Hardcoded API key detected
+
+Severity:
+Critical
+
+Agent:
+ConsensusEngine
+
+Confidence:
+100%
+```
+
+---
+
+## Future Improvements
+
+- AST-based chunking for very large files
+- Pull Request integration
+- Support for multiple programming languages
+- Improved historical learning
+- Automated code fix suggestions
+
+---
+
+## License
+
+MIT License
