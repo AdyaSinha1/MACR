@@ -1,0 +1,71 @@
+[project]
+name = "macr"
+version = "0.1.0"
+description = "Multi-Agent AI Code Review System"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    {name = "Your Name", email = "you@example.com"},
+]
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "google-generativeai>=0.8.0",
+    "pydantic>=2.0.0",
+    "structlog>=24.1.0",
+    "tenacity>=8.0.0",
+    "python-dotenv>=1.0.0",
+    "typer>=0.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "flake8>=7.0.0",
+    "mypy>=1.0.0",
+    "black>=24.0.0",
+]
+memory = [
+    "faiss-cpu>=1.7.4",
+    "sentence-transformers>=2.0.0",
+]
+
+[project.scripts]
+macr = "cli.main:app"
+
+[project.urls]
+Homepage = "https://github.com/yourusername/macr"
+Repository = "https://github.com/yourusername/macr"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = false
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]

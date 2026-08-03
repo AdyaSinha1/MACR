@@ -1,0 +1,58 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# =========================
+# Environment secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Testing / tooling
+# =========================
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# =========================
+# Generated outputs
+# =========================
+*.log
+reports/
+*.md
+!README.md
+!docs/*.md
+
+# =========================
+# Data / embeddings
+# =========================
+data/
+*.faiss
+*.pkl
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db
+ 
+# Python package build artifacts
+*.egg-info/

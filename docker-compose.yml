@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  macr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    volumes:
+      - ./samples:/app/samples
+      - ./data:/app/data
+    # Example command to run a review (uncomment to use)
+    # command: ["review", "samples/test.py"]

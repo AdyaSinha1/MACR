@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MACR | Multi-Agent Code Review</title>
+    <link rel="stylesheet" href="styles.css?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="glass-header">
+            <div class="logo">
+                <span class="logo-text">MACR</span>
+                <span class="logo-sub">Multi-Agent Code Review</span>
+            </div>
+            <div class="controls">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="memory-toggle">
+                    <span class="slider"></span>
+                    <span class="label-text">Enable FAISS Memory</span>
+                </label>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-layout">
+            <!-- Left Pane: Code Editor -->
+            <section class="editor-pane glass-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-code"></i> Code to Review</h3>
+                    <div class="actions">
+                        <input type="text" id="file-path" placeholder="Path (e.g. src/main.py)" value="samples/test.py">
+                        <button id="clear-btn" class="btn-secondary"><i class="fas fa-trash-alt"></i> Clear</button>
+                    </div>
+                </div>
+                <div class="editor-container">
+                    <textarea id="code-input" spellcheck="false" placeholder="Paste your code here..."></textarea>
+                </div>
+                <div class="panel-footer">
+                    <span id="char-count">0 chars</span>
+                    <button id="review-btn" class="btn-primary"><i class="fas fa-play"></i> Run Review</button>
+                </div>
+            </section>
+
+            <!-- Right Pane: Status & Findings -->
+            <section class="results-pane">
+                
+                <!-- Agent Status Cards -->
+                <div class="agents-grid">
+                    <div class="agent-card glass-panel" id="agent-StyleAgent">
+                        <div class="agent-header">
+                            <i class="fas fa-paint-brush agent-icon"></i>
+                            <h4>StyleAgent</h4>
+                            <div class="status-indicator idle" id="indicator-StyleAgent"></div>
+                        </div>
+                        <div class="agent-details">
+                            <span class="status-text" id="status-StyleAgent">Idle</span>
+                            <div class="progress-bar"><div class="fill" id="progress-StyleAgent" style="width: 0%"></div></div>
+                        </div>
+                    </div>
+                    
+                    <div class="agent-card glass-panel" id="agent-BugAgent">
+                        <div class="agent-header">
+                            <i class="fas fa-bug agent-icon"></i>
+                            <h4>BugAgent</h4>
+                            <div class="status-indicator idle" id="indicator-BugAgent"></div>
+                        </div>
+                        <div class="agent-details">
+                            <span class="status-text" id="status-BugAgent">Idle</span>
+                            <div class="progress-bar"><div class="fill" id="progress-BugAgent" style="width: 0%"></div></div>
+                        </div>
+                    </div>
+                    
+                    <div class="agent-card glass-panel" id="agent-SecurityAgent">
+                        <div class="agent-header">
+                            <i class="fas fa-shield-alt agent-icon"></i>
+                            <h4>SecurityAgent</h4>
+                            <div class="status-indicator idle" id="indicator-SecurityAgent"></div>
+                        </div>
+                        <div class="agent-details">
+                            <span class="status-text" id="status-SecurityAgent">Idle</span>
+                            <div class="progress-bar"><div class="fill" id="progress-SecurityAgent" style="width: 0%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Global Status -->
+                <div class="global-status glass-panel" id="global-status-panel">
+                    <div class="status-header">
+                        <h3 id="current-stage">Ready to review</h3>
+                        <div class="spinner" id="main-spinner" style="display: none;"></div>
+                    </div>
+                    <p id="status-message" class="text-muted">Enter code and click Run Review to begin.</p>
+                </div>
+
+                <!-- Findings Section -->
+                <div class="findings-container glass-panel" id="findings-panel" style="display: none;">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-clipboard-check"></i> Final Report</h3>
+                        <div class="metrics">
+                            <span class="badge" id="metric-confidence">100% Confidence</span>
+                            <span class="badge" id="metric-ratio">0% Redundancy</span>
+                        </div>
+                    </div>
+                    
+                    <div id="findings-list" class="findings-list">
+                        <!-- Findings injected here by JS -->
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+    
+    <!-- Error Toast -->
+    <div id="toast" class="toast hidden">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="toast-message">Error</span>
+    </div>
+
+    <script src="app.js?v=2"></script>
+</body>
+</html>
