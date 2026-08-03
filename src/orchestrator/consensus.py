@@ -56,8 +56,7 @@ class ConsensusEngine:
 
         # Calculate metrics
         avg_confidence = (
-            sum(f.confidence for f in resolved_findings) /
-            len(resolved_findings)
+            sum(f.confidence for f in resolved_findings) / len(resolved_findings)
             if resolved_findings
             else 1.0
         )
@@ -117,8 +116,7 @@ class ConsensusEngine:
         return groups
 
     async def _resolve_conflict(self, group: List[Finding]) -> Resolution:
-        logger.info("Resolving conflicting findings semantically",
-                    count=len(group))
+        logger.info("Resolving conflicting findings semantically", count=len(group))
 
         # Determine the highest severity category to use as the merged category
         severity_order = {"critical": 4, "high": 3, "medium": 2, "low": 1}

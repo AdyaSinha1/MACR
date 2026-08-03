@@ -28,8 +28,7 @@ def review(
     output: str = typer.Option(
         "review_report.md", "--output", "-o", help="Output Markdown file"
     ),
-    verbose: bool = typer.Option(
-        False, "--verbose", "-v", help="Enable debug logging"),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable debug logging"),
     use_memory: bool = typer.Option(
         True, "--use-memory/--no-memory", help="Enable FAISS memory context"
     ),
@@ -41,8 +40,7 @@ def review(
         with open(file_path, "r") as f:
             code_content = f.read()
     except Exception as e:
-        typer.secho(
-            f"Failed to read file {file_path}: {e}", fg=typer.colors.RED)
+        typer.secho(f"Failed to read file {file_path}: {e}", fg=typer.colors.RED)
         raise typer.Exit(code=1)
 
     # Initialize memory if requested
@@ -54,8 +52,7 @@ def review(
 
             typer.secho("Initializing memory store...", fg=typer.colors.BLUE)
             embedding_service = EmbeddingService()
-            memory_store = FaissMemoryStore(
-                embedding_service=embedding_service)
+            memory_store = FaissMemoryStore(embedding_service=embedding_service)
         except ImportError:
             typer.secho(
                 "Memory module not installed. Install with `pip install .[memory]`",
@@ -69,8 +66,7 @@ def review(
 
     try:
         # Run async orchestrator
-        final_report = asyncio.run(
-            coordinator.review_file(file_path, code_content))
+        final_report = asyncio.run(coordinator.review_file(file_path, code_content))
     except Exception as e:
         typer.secho(f"\nReview failed: {e}", fg=typer.colors.RED)
         raise typer.Exit(code=1)
@@ -80,8 +76,7 @@ def review(
     with open(output, "w", encoding="utf-8") as f:
         f.write(markdown_content)
 
-    typer.secho(
-        f"Review complete! Report saved to {output}", fg=typer.colors.GREEN)
+    typer.secho(f"Review complete! Report saved to {output}", fg=typer.colors.GREEN)
 
 
 if __name__ == "__main__":

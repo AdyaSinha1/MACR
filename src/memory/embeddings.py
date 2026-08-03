@@ -57,8 +57,7 @@ class EmbeddingService:
     def get_embedding(self, text: str) -> List[float]:
         """Returns the vector embedding for a given text, using cache if available."""
         if not text.strip():
-            logger.warning(
-                "Empty text provided for embedding, returning zero vector")
+            logger.warning("Empty text provided for embedding, returning zero vector")
             return [0.0] * self.dimension
 
         text_hash = self._hash_text(text)

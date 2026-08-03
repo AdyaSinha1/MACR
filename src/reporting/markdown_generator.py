@@ -22,9 +22,7 @@ def generate_markdown_report(report: FinalReport) -> str:
     lines.append("## Findings\n")
 
     for i, finding in enumerate(report.findings, 1):
-        lines.append(
-            f"### {i}. [{finding.category.upper()}] {finding.description}"
-        )
+        lines.append(f"### {i}. [{finding.category.upper()}] {finding.description}")
         lines.append(
             f"**Severity**: `{finding.severity}` | "
             f"**Location**: `{finding.code_location}`"

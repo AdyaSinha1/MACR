@@ -25,15 +25,13 @@ class CircuitBreaker:
         if self.state == "HALF_OPEN":
             self.state = "OPEN"
             self.failures = self.failure_threshold
-            logger.warning(
-                "Circuit reopened after failure in half-open state.")
+            logger.warning("Circuit reopened after failure in half-open state.")
         else:
             self.failures += 1
             self.last_failure_time = time.time()
             if self.failures >= self.failure_threshold:
                 self.state = "OPEN"
-                logger.warning(
-                    "Circuit breaker opened due to repeated failures.")
+                logger.warning("Circuit breaker opened due to repeated failures.")
 
     def record_success(self):
         self.failures = 0

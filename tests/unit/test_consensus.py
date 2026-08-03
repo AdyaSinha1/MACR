@@ -18,39 +18,33 @@ def test_parse_location(consensus_engine):
         10,
         15,
     )
-    assert consensus_engine._parse_location(
-        "src/main.py:10") == ("src/main.py", 10, 10)
+    assert consensus_engine._parse_location("src/main.py:10") == ("src/main.py", 10, 10)
     assert consensus_engine._parse_location("unknown") == ("unknown", 0, 0)
 
 
 def test_overlap(consensus_engine):
     # Same file, overlapping ranges
     assert (
-        consensus_engine._overlap(
-            "file.py:10-15", "file.py:12-20", tolerance=0) is True
+        consensus_engine._overlap("file.py:10-15", "file.py:12-20", tolerance=0) is True
     )
     assert (
-        consensus_engine._overlap(
-            "file.py:10-15", "file.py:15-20", tolerance=0) is True
+        consensus_engine._overlap("file.py:10-15", "file.py:15-20", tolerance=0) is True
     )
 
     # Same file, no overlap, but within tolerance 5
     assert (
-        consensus_engine._overlap(
-            "file.py:10-15", "file.py:20-25", tolerance=5) is True
+        consensus_engine._overlap("file.py:10-15", "file.py:20-25", tolerance=5) is True
     )
 
     # Same file, no overlap, outside tolerance
     assert (
-        consensus_engine._overlap(
-            "file.py:10-15", "file.py:25-30", tolerance=5)
+        consensus_engine._overlap("file.py:10-15", "file.py:25-30", tolerance=5)
         is False
     )
 
     # Different files
     assert (
-        consensus_engine._overlap(
-            "file1.py:10-15", "file2.py:10-15", tolerance=5)
+        consensus_engine._overlap("file1.py:10-15", "file2.py:10-15", tolerance=5)
         is False
     )
 

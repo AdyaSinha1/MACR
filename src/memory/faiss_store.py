@@ -72,8 +72,7 @@ class FaissMemoryStore:
             }
         )
         self._save_index()
-        logger.info("Stored review in FAISS memory",
-                    file_path=report.file_path)
+        logger.info("Stored review in FAISS memory", file_path=report.file_path)
 
     def retrieve_similar(self, query_text: str, k: int = 3) -> List[Dict[str, Any]]:
         """Retrieves the top k most similar past reviews based on semantic similarity."""

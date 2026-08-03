@@ -32,14 +32,12 @@ class BaseAgent(abc.ABC):
                 f"Circuit breaker is open for {self.name}. Skipping analysis."
             )
             EventBus.publish_sync(
-                "agent_error", {"agent": self.name,
-                                "error": "Circuit breaker open"}
+                "agent_error", {"agent": self.name, "error": "Circuit breaker open"}
             )
             return self._create_error_finding("Agent skipped due to circuit breaker.")
 
         try:
-            logger.info(f"{self.name} starting analysis.",
-                        file=context.file_path)
+            logger.info(f"{self.name} starting analysis.", file=context.file_path)
             EventBus.publish_sync(
                 "agent_status", {"agent": self.name, "status": "starting"}
             )
@@ -52,8 +50,7 @@ class BaseAgent(abc.ABC):
 
         except Exception as e:
             logger.error(f"{self.name} failed during analysis", error=str(e))
-            EventBus.publish_sync(
-                "agent_error", {"agent": self.name, "error": str(e)})
+            EventBus.publish_sync("agent_error", {"agent": self.name, "error": str(e)})
             self.circuit_breaker.record_failure()
             return self._create_error_finding(f"Agent crashed: {str(e)}")
 

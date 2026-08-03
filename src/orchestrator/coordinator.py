@@ -35,20 +35,17 @@ class ReviewCoordinator:
 
         past_context = ""
         if self.memory_store:
-            EventBus.publish_sync(
-                "review_status", {"status": "retrieving_memory"})
+            EventBus.publish_sync("review_status", {"status": "retrieving_memory"})
             # Truncate code content to first 1000 chars to avoid diluting the semantic embedding
             similar_reviews = self.memory_store.retrieve_similar(
                 code_content[:1000], k=2
             )
             if similar_reviews:
-                past_context = "\n---\n".join([r["summary"]
-                                              for r in similar_reviews])
+                past_context = "\n---\n".join([r["summary"] for r in similar_reviews])
                 logger.info(
                     "Retrieved past reviews for context", count=len(similar_reviews)
                 )
-                EventBus.publish_sync(
-                    "memory_context", {"count": len(similar_reviews)})
+                EventBus.publish_sync("memory_context", {"count": len(similar_reviews)})
 
         # Initialize the immutable blackboard
         context = SharedContext(

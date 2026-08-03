@@ -56,8 +56,7 @@ class LLMClient:
                 return response.choices[0].message.content
 
         except Exception as e:
-            logger.error("LLM API call failed",
-                         error=str(e), model=self.model_name)
+            logger.error("LLM API call failed", error=str(e), model=self.model_name)
             raise
 
     async def generate_structured(self, prompt: str, schema: Type[T]) -> T:
