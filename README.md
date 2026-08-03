@@ -74,6 +74,7 @@ Style Agent     Bug Agent     Security Agent
 ## Demo
 
 ![MACR Demo](docs/images/macr.png)
+
 ## Installation
 
 ### Clone Repository
@@ -166,7 +167,7 @@ http://127.0.0.1:8000
 
 ---
 
-## Docker Support
+## Docker Support (optional)
 
 Build and run using Docker:
 
