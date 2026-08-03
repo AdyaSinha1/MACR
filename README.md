@@ -2,119 +2,175 @@
 
 ![CI](https://github.com/AdyaSinha1/MACR/actions/workflows/ci.yml/badge.svg)
 
-MACR (Multi-Agent Code Review System) is an autonomous AI-powered code review platform that uses multiple specialized agents to analyze source code. Instead of relying on a single LLM prompt, MACR uses collaborative agents for Style, Bug Detection, and Security analysis, coordinated through an orchestration layer.
+MACR (Multi-Agent Code Review System) is an autonomous AI-powered code review platform that uses multiple specialized AI agents to analyze source code. Instead of depending on a single LLM prompt, MACR deploys collaborative agents for **Style Analysis, Bug Detection, and Security Auditing** coordinated through an intelligent orchestration layer.
 
-The system combines an **Evaluator-Optimizer loop**, **Consensus Engine**, and **FAISS Vector Memory** to produce reliable and context-aware code review reports.
-
----
-
-## Features
-
-### Multi-Agent Code Analysis
-MACR uses specialized agents that independently analyze code:
-
-- **Style Agent** - Detects code quality and style issues
-- **Bug Agent** - Identifies correctness problems and potential failures
-- **Security Agent** - Finds security vulnerabilities and risky patterns
-
-Agents execute concurrently using a custom asyncio-based orchestrator.
+The system combines an **Evaluator-Optimizer Loop**, **Consensus Engine**, and **FAISS-powered Retrieval Augmented Memory (RAG)** to generate reliable, context-aware, and explainable code review reports.
 
 ---
 
-### Evaluator-Optimizer Loop
+# Features
 
-Each agent evaluates and refines its own findings using confidence-based iterations to reduce incorrect suggestions and improve reliability.
+## Multi-Agent Code Analysis
+
+MACR uses specialized agents that independently inspect source code:
+
+### Style Agent
+- Detects code quality issues
+- Identifies formatting problems
+- Suggests maintainability improvements
+
+### Bug Agent
+- Finds logical errors
+- Detects potential runtime failures
+- Identifies incorrect implementations
+
+### Security Agent
+- Detects vulnerabilities
+- Finds unsafe coding practices
+- Identifies security risks
+
+Agents execute concurrently using an asynchronous orchestration system.
 
 ---
 
-### Consensus Engine
+# Evaluator-Optimizer Loop
 
-Multiple agent findings are merged using semantic similarity and severity-based conflict resolution to generate a unified review report.
+Each agent follows an iterative reasoning workflow:
+
+1. Generate initial findings
+2. Evaluate confidence score
+3. Refine incorrect or weak suggestions
+4. Produce optimized final output
+
+This reduces false positives and improves review accuracy.
 
 ---
 
-### RAG Memory System
+# Consensus Engine
 
-MACR uses:
+MACR combines outputs from multiple agents using:
+
+- Semantic similarity comparison
+- Severity-based prioritization
+- Duplicate finding removal
+- Confidence-based ranking
+
+The final report represents a consensus between multiple AI reviewers.
+
+---
+
+# RAG Memory System
+
+MACR includes a historical learning layer using:
 
 - FAISS Vector Database
-- Sentence Transformer embeddings
+- Sentence Transformer Embeddings
+- Similar review retrieval
 
-to retrieve similar historical reviews and provide additional context during analysis.
-
----
-
-## Architecture
-
-```
-                 Code Input
-                     |
-                     v
-              Coordinator
-                     |
-     --------------------------------
-     |              |               |
-     v              v               v
-Style Agent     Bug Agent     Security Agent
-     |              |               |
-     --------------------------------
-                     |
-                     v
-            Consensus Engine
-                     |
-                     v
-             FAISS Memory Store
-                     |
-                     v
-            Markdown Report
-```
+Previous review knowledge is retrieved to provide better contextual suggestions for future analyses.
 
 ---
 
-## Demo
+# Architecture
+
+```
+                         Code Input
+                             |
+                             v
+                       Coordinator
+                             |
+        ------------------------------------------------
+        |                     |                        |
+        v                     v                        v
+   Style Agent            Bug Agent             Security Agent
+        |                     |                        |
+        ------------------------------------------------
+                             |
+                             v
+                    Consensus Engine
+                             |
+                             v
+                    FAISS Memory Store
+                             |
+                             v
+                    Review Report Generator
+                             |
+                             v
+                     Markdown Report
+```
+
+---
+
+# Demo
 
 ![MACR Demo](docs/images/macr.png)
 
-## Installation
+---
 
-### Clone Repository
+# Installation
+
+## Clone Repository
 
 ```bash
 git clone https://github.com/AdyaSinha1/MACR.git
 cd MACR
 ```
 
-### Create Virtual Environment
+---
+
+## Create Virtual Environment
 
 ```bash
 python -m venv venv
 ```
 
-Activate:
+Activate environment:
 
-Windows:
+### Windows
 
 ```bash
 venv\Scripts\activate
 ```
 
-Linux/Mac:
+### Linux / macOS
 
 ```bash
 source venv/bin/activate
 ```
 
-### Install Dependencies
+---
+
+## Install Dependencies
+
+Basic installation:
 
 ```bash
 pip install -e .
 ```
 
+Development installation:
+
+```bash
+pip install -e ".[dev]"
+```
+
+Memory/RAG dependencies:
+
+```bash
+pip install -e ".[memory]"
+```
+
+Complete installation:
+
+```bash
+pip install -e ".[dev,memory]"
+```
+
 ---
 
-## Configuration
+# Configuration
 
-Create a `.env` file:
+Create a `.env` file in the project root:
 
 ```env
 GROQ_API_KEY=your_groq_api_key_here
@@ -122,36 +178,43 @@ GROQ_API_KEY=your_groq_api_key_here
 
 ---
 
-## Usage
+# Usage
 
-Run MACR on a Python file:
+## Run Code Review
+
+Analyze a Python file:
 
 ```bash
 python -m src.cli.main samples/test.py
 ```
 
-The generated review report will be saved as:
+Generated report:
 
 ```
 review_report.md
 ```
 
-Example output:
+Example execution:
 
 ```
 Initializing memory store...
+
 Starting multi-agent review...
-StyleAgent starting analysis
-BugAgent starting analysis
-SecurityAgent starting analysis
-Resolving conflicting findings
-Stored review in FAISS memory
+
+StyleAgent analyzing code...
+BugAgent analyzing code...
+SecurityAgent analyzing code...
+
+Running consensus analysis...
+
+Storing review in FAISS memory...
+
 Review complete!
 ```
 
 ---
 
-## Web Interface
+# Web API Interface
 
 Start the API server:
 
@@ -159,7 +222,7 @@ Start the API server:
 uvicorn src.api.app:app --reload
 ```
 
-Open:
+Access:
 
 ```
 http://127.0.0.1:8000
@@ -167,9 +230,21 @@ http://127.0.0.1:8000
 
 ---
 
-## Docker Support (optional)
+# Docker Support
 
-Build and run using Docker:
+Build Docker image:
+
+```bash
+docker build -t macr .
+```
+
+Run:
+
+```bash
+docker run macr
+```
+
+Using docker compose:
 
 ```bash
 docker-compose build
@@ -178,9 +253,9 @@ docker-compose run macr
 
 ---
 
-## Evaluation
+# Evaluation
 
-Run evaluation on sample code:
+Run evaluation on sample files:
 
 ```bash
 python scripts/evaluate.py samples/test.py
@@ -188,12 +263,79 @@ python scripts/evaluate.py samples/test.py
 
 ---
 
-## Project Structure
+# Testing
+
+Run complete test suite:
+
+```bash
+pytest tests/
+```
+
+Run linting:
+
+```bash
+flake8 src/ tests/
+```
+
+Check formatting:
+
+```bash
+black --check src/ tests/
+```
+
+Run type checking:
+
+```bash
+mypy src/
+```
+
+---
+
+# Continuous Integration
+
+MACR uses GitHub Actions for automated validation.
+
+Every push and pull request runs:
+
+- Dependency installation
+- Code formatting checks
+- Static analysis
+- Type checking
+- Unit tests
+- Docker build verification
+
+CI Pipeline:
+
+```
+Push / Pull Request
+
+        |
+        v
+
+GitHub Actions
+
+        |
+        +----------------+
+        |                |
+        v                v
+
+ Python Tests       Docker Build
+
+        |
+        v
+
+ Successful Deployment
+```
+
+---
+
+# Project Structure
 
 ```
 MACR
 │
 ├── src
+│   │
 │   ├── agents
 │   │   ├── style_agent.py
 │   │   ├── bug_agent.py
@@ -208,24 +350,39 @@ MACR
 │   │   └── faiss_store.py
 │   │
 │   ├── core
-│   └── reporting
+│   │
+│   ├── reporting
+│   │
+│   └── api
 │
 ├── tests
+│
 ├── samples
+│
+├── scripts
+│
+├── Dockerfile
+│
+├── docker-compose.yml
+│
+├── pyproject.toml
+│
 └── README.md
 ```
 
 ---
 
-## Example Review Report
+# Example Review Report
 
-MACR generates a structured Markdown report containing:
+MACR produces structured reports containing:
 
 - Severity level
-- Issue location
-- Agent responsible
+- File location
+- Responsible agent
 - Confidence score
 - Consensus reasoning
+- Suggested improvements
+
 
 Example:
 
@@ -236,8 +393,11 @@ Hardcoded API key detected
 Severity:
 Critical
 
-Agent:
-ConsensusEngine
+Detected By:
+SecurityAgent
+
+Consensus:
+Confirmed by multiple agents
 
 Confidence:
 100%
@@ -245,16 +405,33 @@ Confidence:
 
 ---
 
-## Future Improvements
+# Key Technologies
 
-- AST-based chunking for very large files
-- Pull Request integration
-- Support for multiple programming languages
-- Improved historical learning
-- Automated code fix suggestions
+| Component | Technology |
+|---|---|
+| Language | Python |
+| AI Agents | LLM-based Agents |
+| Orchestration | AsyncIO |
+| Memory | FAISS |
+| Embeddings | Sentence Transformers |
+| API | FastAPI |
+| Testing | Pytest |
+| CI/CD | GitHub Actions |
+| Containerization | Docker |
 
 ---
 
-## License
+# Future Improvements
+
+- AST-based intelligent code chunking
+- Pull Request automation
+- Multi-language support
+- Automated code fixing
+- Advanced learning from previous reviews
+- IDE extension support
+
+---
+
+# License
 
 MIT License
