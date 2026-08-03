@@ -71,6 +71,9 @@ Style Agent     Bug Agent     Security Agent
 
 ---
 
+## Demo
+
+![MACR Demo](docs/images/macr.png)
 ## Installation
 
 ### Clone Repository
