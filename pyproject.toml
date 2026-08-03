@@ -4,9 +4,11 @@ version = "0.1.0"
 description = "Multi-Agent AI Code Review System"
 readme = "README.md"
 requires-python = ">=3.10"
+
 authors = [
     {name = "Your Name", email = "you@example.com"},
 ]
+
 license = {text = "MIT"}
 
 classifiers = [
@@ -14,6 +16,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+
 
 dependencies = [
     "google-genai>=0.2.0",
@@ -24,7 +27,9 @@ dependencies = [
     "typer>=0.9.0",
 ]
 
+
 [project.optional-dependencies]
+
 dev = [
     "pytest>=8.0.0",
     "pytest-asyncio>=0.23.0",
@@ -33,55 +38,118 @@ dev = [
     "black>=24.0.0",
 ]
 
+
 memory = [
     "faiss-cpu>=1.7.4",
     "sentence-transformers>=2.0.0",
 ]
 
+
 [project.scripts]
 macr = "cli.main:app"
 
+
 [project.urls]
-Homepage = "https://github.com/yourusername/macr"
-Repository = "https://github.com/yourusername/macr"
+Homepage = "https://github.com/AdyaSinha1/MACR"
+Repository = "https://github.com/AdyaSinha1/MACR"
+
 
 
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = [
+    "setuptools>=61.0"
+]
+
 build-backend = "setuptools.build_meta"
 
 
+
 [tool.setuptools]
+
 package-dir = {"" = "src"}
 
 
+
 [tool.setuptools.packages.find]
+
 where = ["src"]
 
 
-[tool.pytest.ini_options]
-asyncio_mode = "auto"
-testpaths = ["tests"]
 
+[tool.pytest.ini_options]
+
+asyncio_mode = "auto"
+testpaths = [
+    "tests"
+]
 
 [tool.mypy]
+
 python_version = "3.10"
+
 warn_return_any = true
 warn_unused_configs = true
+
 ignore_missing_imports = true
+
+exclude = [
+    "venv/",
+    ".venv/",
+]
+
+follow_imports = "skip"
+follow_untyped_imports = false
+
+ignore_errors = false
+
+
+[[tool.mypy.overrides]]
+
+module = [
+    "numpy",
+    "numpy.*",
+    "faiss",
+    "faiss.*",
+    "sentence_transformers",
+    "sentence_transformers.*",
+    "sklearn",
+    "sklearn.*",
+]
+
+ignore_errors = true
+follow_imports = "skip"
 
 
 [tool.black]
+
 line-length = 88
-target-version = ['py310']
+
+target-version = [
+    "py310"
+]
+
 
 
 [tool.flake8]
+
 max-line-length = 88
-extend-ignore = ["E203", "W503"]
+
+extend-ignore = [
+    "E203",
+    "W503"
+]
+
 exclude = [
     ".git",
     "__pycache__",
     "venv",
     ".venv"
 ]
+[[tool.mypy.overrides]]
+module = [
+    "numpy.*",
+    "faiss.*",
+    "sentence_transformers.*",
+    "sklearn.*",
+]
+ignore_missing_imports = true
